@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class DocToBigramProb {
+public class DocToBigramProb extends PreProcessableString {
 
 	private int nBigramsInDoc = 0;
 	private Map<String, Integer> mapProb = new HashMap<>();
@@ -15,12 +15,13 @@ public class DocToBigramProb {
 
 	public DocToBigramProb() {
 	}
-	
-	public List<String> getBigrams(){
+
+	public List<String> getBigrams() {
 		return new ArrayList<>(indexSet);
 	}
 
 	public void addSentence(String sentence) {
+		sentence = preProcess(sentence);
 		String[] words = sentence.split("\\s+");
 		for (int i = 0; i < words.length - 1; i++) {
 			String key = words[i] + " " + words[i + 1];

@@ -3,7 +3,7 @@ package fonetica;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocToVec {
+public class DocToVec extends PreProcessableString {
 
 	private final DocToBigramProb mapProb;
 
@@ -12,14 +12,11 @@ public class DocToVec {
 	}
 
 	public List<Double[]> getBigramVectorsFrom(String document) {
+		document = preProcess(document);
 		List<Double[]> values = new ArrayList<>();
-		if (document.length() < 2) {
-			document = document.concat(" ");
-		}
-
-		// mapProb.addSentence(document);
 
 		String[] words = document.split("\\s+");
+
 		for (int i = 0; i < words.length - 1; i++) {
 			String key = words[i] + " " + words[i + 1];
 			Double[] value = new Double[] { mapProb.getProbByBigram(key.split("\\s+")),
