@@ -25,44 +25,23 @@ public class EmbbededVectorsFactory {
 				// cria um novo vetor
 
 				/*
-				 * [ p(wi|wi-1)/p(wi-1), (I(wi)-I(wi-1))/I(wi,wi-1)]
+				 * [ p(wi|wi-1)/p(wi-1), (I(wi)-I(wi-1))]
 				 */
-				double bigramIndex = bigramProb.indexOfBigram(new Double[][] { v1, v2 });
+
 				double probV1V2 = bigramProb.getProbByBigram(new Double[][] { v1, v2 });
 
 				// System.out.println("probv1v2 -> "+probV1V2);
 
 				Double[] newVector = null;
+				Double logProb = null;
 
-				if (v1[0] > 0) {
-
-					Double logProb = probV1V2 / v1[0];
-
-					logProb = logProb.isInfinite() ? 1 : logProb;
-
-					if (bigramIndex != 0) {
-						newVector = new Double[] { logProb, (v2[1] - v1[1]) / bigramIndex };
-					} else {
-						double length = Math.max(Math.abs(v2[1]), Math.abs(v1[1]));
-						length = length > 0 ? length : 1;
-
-						newVector = new Double[] { logProb, (v2[1] - v1[1]) / length };
-					}
+				if (v2[0] > 0) {
+					logProb = probV1V2 / v2[0];
 				} else {
-
-					Double logProb = probV1V2;
-					logProb = logProb.isInfinite() ? 1 : logProb;
-
-					if (bigramIndex != 0) {
-						newVector = new Double[] { logProb, (v2[1] - v1[1]) / bigramIndex };
-					} else {
-						double length = Math.max(Math.abs(v2[1]), Math.abs(v1[1]));
-						length = length > 0 ? length : 1;
-
-						newVector = new Double[] { logProb, (v2[1] - v1[1]) / length };
-					}
+					logProb = probV1V2;
 				}
-				// System.out.println("new -> " + Arrays.toString(newVector));
+				newVector = unitaryVector(new Double[] { logProb, (v2[1] - v1[1]) });
+
 				// add the new value to new vector with n-1 dimension
 				// adiciona o novo valor aos vetores para formação de dimensão n-1
 				newValues.add(newVector);
@@ -126,6 +105,14 @@ public class EmbbededVectorsFactory {
 		}
 
 		return buffer[lenA][lenB];
+	}
+
+	public static Double[] unitaryVector(Double[] v) {
+		double norma = norma(v);
+		for (int i = 0; i < v.length; i++) {
+			v[i] = v[i] / norma;
+		}
+		return v;
 	}
 
 	/**

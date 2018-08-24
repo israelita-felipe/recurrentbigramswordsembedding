@@ -15,12 +15,28 @@ public class ChunkingTest {
 	public void generateChunkingDataset() throws IOException {
 		DocToBigramProb d2bp = new DocToBigramProb();
 
-		Scanner sc = new Scanner(new FileInputStream(new File("chunkingDataset.txt")));
-		OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(new File("LawDomainChunking.txt")));
+		Scanner sc = new Scanner(new FileInputStream(new File("Constituicao de 1988.txt")), "UTF-8");
 		while (sc.hasNextLine()) {
-			String[] sentences = d2bp.splitPossibleSentences(sc.nextLine());
+			d2bp.addSentence((sc.nextLine()));
+		}
+		sc.close();
+
+		DocToVec d2v = new DocToVec(d2bp);
+
+		sc = new Scanner(new FileInputStream(new File("chunkingDataset.txt")));
+		OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(new File("LawDomainChunking.txt")));
+		fw.write("doc_prob\tdoc_index\tsent_prob\tsent_index\tdocument\tsentence\tclass\n");
+		while (sc.hasNextLine()) {
+			String document = sc.nextLine();
+			String[] sentences = d2bp.splitPossibleSentences(document);
+			Double[] docVector = EmbbededVectorsFactory.embbed(d2v.getBigramVectorsFrom(document));
 			for (String sentence : sentences) {
 				System.out.println(sentence);
+				Double[] sentenceVector = EmbbededVectorsFactory.embbed(d2v.getBigramVectorsFrom(sentence));
+				fw.write(String.format("%.20f\t%.20f\t%.20f\t%.20f\t", docVector[0], docVector[1], sentenceVector[0],
+						sentenceVector[1]));
+				fw.write(document);
+				fw.write("\t");
 				fw.write(sentence);
 				fw.write("\t?\n");
 			}

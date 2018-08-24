@@ -16,6 +16,10 @@ public class DocToVec extends PreProcessableString {
 		List<Double[]> values = new ArrayList<>();
 
 		String[] words = document.split("\\s+");
+		
+		if(words.length==1) {
+			words = new String[] {words[0],"."};
+		}
 
 		for (int i = 0; i < words.length - 1; i++) {
 			String key = words[i] + " " + words[i + 1];
