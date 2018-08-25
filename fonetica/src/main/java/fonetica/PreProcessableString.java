@@ -31,7 +31,8 @@ public class PreProcessableString extends PreProcessable<String> {
 				.replaceAll("\\}", " } ")
 				.replaceAll("\\[", " [ ")
 				.replaceAll("\\]", " ] ")
-				.replaceAll("\\s+", " ");
+				.replaceAll("\\s+", " ")
+				.trim();
 	}
 	
 	@Override

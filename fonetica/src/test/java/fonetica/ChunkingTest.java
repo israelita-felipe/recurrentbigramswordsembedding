@@ -23,7 +23,7 @@ public class ChunkingTest {
 
 		DocToVec d2v = new DocToVec(d2bp);
 
-		sc = new Scanner(new FileInputStream(new File("chunkingDataset.txt")));
+		sc = new Scanner(new FileInputStream(new File("Constituicao de 1988.txt")));
 		OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(new File("LawDomainChunking.txt")));
 		fw.write("doc_prob\tdoc_index\tsent_prob\tsent_index\tdocument\tsentence\tclass\n");
 		while (sc.hasNextLine()) {
